@@ -1,0 +1,86 @@
+# Copyright (C) 2017 WPCampus_Notifications
+# This file is distributed under the same license as the WPCampus_Notifications package.
+msgid ""
+msgstr ""
+"Project-Id-Version: WPCampus_Notifications\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language-Team: WPCampus <code@wpcampus.org>\n"
+"Last-Translator: WPCampus <code@wpcampus.org>\n"
+"Report-Msgid-Bugs-To: https://github.com/wpcampus/wpcampus-notifications-plugin/issues\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: wpcampus-notifications.php:170
+msgctxt "Post Type General Name"
+msgid "Notifications"
+msgstr ""
+
+#: wpcampus-notifications.php:171
+msgctxt "Post Type Singular Name"
+msgid "Notification"
+msgstr ""
+
+#: wpcampus-notifications.php:172, wpcampus-notifications.php:173, wpcampus-notifications.php:193
+msgid "Notifications"
+msgstr ""
+
+#: wpcampus-notifications.php:174
+msgid "Notification Archives"
+msgstr ""
+
+#: wpcampus-notifications.php:175
+msgid "Notification Attributes"
+msgstr ""
+
+#: wpcampus-notifications.php:176
+msgid "All Notifications"
+msgstr ""
+
+#: wpcampus-notifications.php:177
+msgid "Add New Notification"
+msgstr ""
+
+#: wpcampus-notifications.php:178
+msgid "New Notification"
+msgstr ""
+
+#: wpcampus-notifications.php:179
+msgid "Edit Notification"
+msgstr ""
+
+#: wpcampus-notifications.php:180
+msgid "Update Notification"
+msgstr ""
+
+#: wpcampus-notifications.php:181
+msgid "View Notification"
+msgstr ""
+
+#: wpcampus-notifications.php:182
+msgid "View Notifications"
+msgstr ""
+
+#: wpcampus-notifications.php:183
+msgid "Search Notification"
+msgstr ""
+
+#: wpcampus-notifications.php:184
+msgid "Insert into notification"
+msgstr ""
+
+#: wpcampus-notifications.php:185
+msgid "Uploaded to this notification"
+msgstr ""
+
+#: wpcampus-notifications.php:186
+msgid "Notifications list"
+msgstr ""
+
+#: wpcampus-notifications.php:187
+msgid "Notifications list navigation"
+msgstr ""
+
+#: wpcampus-notifications.php:188
+msgid "Filter notifications list"
+msgstr ""
