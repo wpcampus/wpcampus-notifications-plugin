@@ -1,3 +1,17 @@
 # WPCampus Notifications WordPress Plugin
 
 Handles notification functionality for WPCampus websites.
+
+## Implementation
+
+The majority of the code that adds the notifications to the WPCampus websites exists in [our network plugin](https://github.com/wpcampus/wpcampus-network-plugin). We use mustache templating to display the notifications. The mustache template for each website exists in its own theme.
+
+### Required Code
+
+* Include the [mustache npm package](https://github.com/wpcampus/wpcampus-network-plugin/blob/master/package.json#L25).
+* Make sure the mustache file is [copied to your assets folder](https://github.com/wpcampus/wpcampus-network-plugin/blob/master/gulpfile.js#L38-L39).
+* [Create the Javascript](https://github.com/wpcampus/wpcampus-network-plugin/blob/master/assets/js/wpcampus-notifications.js) to get the notifications and use to populate the mustache template.
+* [Enqueue the notifications script](https://github.com/wpcampus/wpcampus-network-plugin/blob/master/wpcampus-network.php#L233-L237).
+* Be sure to add the mustache template. The mustache template for each of our websites exists in its own theme:
+  * [WPCampus 2017 theme](https://github.com/wpcampus/wpcampus-2017-theme/blob/master/partials/notifications.html)
+  * [WPCampus Online theme](https://github.com/wpcampus/wpcampus-online-theme/blob/master/partials/notifications.html)
