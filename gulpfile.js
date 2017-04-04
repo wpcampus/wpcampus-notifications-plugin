@@ -1,4 +1,5 @@
 var gulp = require('gulp');
+var minify = require('gulp-minify');
 var phpcs = require('gulp-phpcs');
 var sort = require('gulp-sort');
 var watch = require('gulp-watch');
@@ -6,10 +7,28 @@ var wp_pot = require('gulp-wp-pot');
 
 // Set the source for specific files.
 var src = {
+	js: ['assets/js/**/*','!assets/js/*.min.js'],
 	php: ['**/*.php','!vendor/**','!node_modules/**']
 };
 
-// Check our PHP
+// Define the destination paths for each file type.
+var dest = {
+	js: 'assets/js'
+};
+
+// Minify our JS
+gulp.task('js',function() {
+	gulp.src(src.js)
+		.pipe(minify({
+			mangle: false,
+			ext:{
+				min:'.min.js'
+			}
+		}))
+		.pipe(gulp.dest(dest.js))
+});
+
+// Check our PHP.
 gulp.task('php',function() {
 	gulp.src(src.php)
 		.pipe(phpcs({
@@ -17,11 +36,6 @@ gulp.task('php',function() {
 			standard: 'WordPress-Core'
 		}))
 		.pipe(phpcs.reporter('log'));
-});
-
-// Watch the files.
-gulp.task('watch',function() {
-	gulp.watch(src.php,['php']);
 });
 
 // Create the translation file.
@@ -40,8 +54,17 @@ gulp.task('translate', function() {
 		.pipe(gulp.dest('languages/wpc-notifications.pot'));
 });
 
+// Compile all the things
+gulp.task('compile',['js']);
+
 // Test our files.
 gulp.task('test',['php']);
 
-// Our default tasks
-gulp.task('default',['test','translate']);
+// Watch the files.
+gulp.task('watch',function() {
+	gulp.watch(src.js,['js']);
+	gulp.watch(src.php,['php']);
+});
+
+// Our default tasks.
+gulp.task('default',['compile','test','translate']);

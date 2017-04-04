@@ -18,9 +18,9 @@ if ( ! defined( 'WPINC' ) ) {
 }
 
 // We only need admin functionality in the admin.
-/*if ( is_admin() ) {
-	require_once wpcampus_notifications()->plugin_dir . 'inc/wpcampus-notifications-admin.php';
-}*/
+if ( is_admin() ) {
+	require_once wpcampus_notifications()->plugin_dir . 'inc/admin.php';
+}
 
 /**
  * PHP class that holds the main/administrative
@@ -31,6 +31,16 @@ if ( ! defined( 'WPINC' ) ) {
  * @package     WPCampus Notifications
  */
 class WPCampus_Notifications {
+
+	/**
+	 * Holds the absolute URL to
+	 * the main plugin directory.
+	 *
+	 * @since   1.0.0
+	 * @access  public
+	 * @var     string
+	 */
+	public $plugin_url;
 
 	/**
 	 * Holds the directory path
@@ -77,7 +87,8 @@ class WPCampus_Notifications {
 	 */
 	protected function __construct() {
 
-		// Store the plugin DIR.
+		// Store the plugin URL and DIR.
+		$this->plugin_url = plugin_dir_url( __FILE__ );
 		$this->plugin_dir = plugin_dir_path( __FILE__ );
 
 		// Runs on activation and deactivation.
@@ -89,6 +100,9 @@ class WPCampus_Notifications {
 
 		// Register our post types.
 		add_action( 'init', array( $this, 'register_cpts' ) );
+
+		// Filter the notification query.
+		add_filter( 'posts_clauses', array( $this, 'filter_posts_clauses' ), 100, 2 );
 
 		// Filter the notification permalink.
 		add_filter( 'post_type_link', array( $this, 'filter_notifications_permalink' ), 100, 2 );
@@ -224,6 +238,33 @@ class WPCampus_Notifications {
 	}
 
 	/**
+	 * Filters all query clauses at once, for convenience.
+	 *
+	 * @since   1.0.0
+	 * @access  public
+	 * @param   $clauses - array - The list of clauses for the query.
+	 * @param   $query - WP_Query - The WP_Query instance (passed by reference).
+	 * @return  array - the filtered clauses.
+	 */
+	public function filter_posts_clauses( $clauses, $query ) {
+		global $wpdb;
+
+		// Only for notification post type.
+		if ( 'notification' != $query->get( 'post_type' ) ) {
+			return $clauses;
+		}
+
+		// LEFT JOIN to get post meta.
+		$clauses['join'] .= " LEFT JOIN {$wpdb->postmeta} wpc_nf_sdt ON wpc_nf_sdt.post_id = {$wpdb->posts}.ID AND wpc_nf_sdt.meta_key = 'wpc_notif_start_dt'";
+		$clauses['join'] .= " LEFT JOIN {$wpdb->postmeta} wpc_nf_edt ON wpc_nf_edt.post_id = {$wpdb->posts}.ID AND wpc_nf_edt.meta_key = 'wpc_notif_end_dt'";
+
+		// Check the data in WHERE.
+		$clauses['where'] .= ' AND IF ( wpc_nf_sdt.meta_value IS NOT NULL, CONVERT( wpc_nf_sdt.meta_value, DATETIME ) <= NOW(), true ) AND IF ( wpc_nf_edt.meta_value IS NOT NULL, CONVERT( wpc_nf_edt.meta_value, DATETIME ) > NOW(), true )';
+
+		return $clauses;
+	}
+
+	/**
 	 * Filters the permalinks for the notifications
 	 * post type to point them to the archive.
 	 *
@@ -262,7 +303,6 @@ class WPCampus_Notifications {
 
 		return $response;
 	}
-
 }
 
 /**

@@ -11,76 +11,120 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://github.com/wpcampus/wpcampus-notifications-plugin/issues\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: wpcampus-notifications.php:170
+#: wpcampus-notifications.php:184
 msgctxt "Post Type General Name"
 msgid "Notifications"
 msgstr ""
 
-#: wpcampus-notifications.php:171
+#: wpcampus-notifications.php:185
 msgctxt "Post Type Singular Name"
 msgid "Notification"
 msgstr ""
 
-#: wpcampus-notifications.php:172, wpcampus-notifications.php:173, wpcampus-notifications.php:193
+#: wpcampus-notifications.php:186, wpcampus-notifications.php:187, wpcampus-notifications.php:207
 msgid "Notifications"
 msgstr ""
 
-#: wpcampus-notifications.php:174
+#: wpcampus-notifications.php:188
 msgid "Notification Archives"
 msgstr ""
 
-#: wpcampus-notifications.php:175
+#: wpcampus-notifications.php:189
 msgid "Notification Attributes"
 msgstr ""
 
-#: wpcampus-notifications.php:176
+#: wpcampus-notifications.php:190
 msgid "All Notifications"
 msgstr ""
 
-#: wpcampus-notifications.php:177
+#: wpcampus-notifications.php:191
 msgid "Add New Notification"
 msgstr ""
 
-#: wpcampus-notifications.php:178
+#: wpcampus-notifications.php:192
 msgid "New Notification"
 msgstr ""
 
-#: wpcampus-notifications.php:179
+#: wpcampus-notifications.php:193
 msgid "Edit Notification"
 msgstr ""
 
-#: wpcampus-notifications.php:180
+#: wpcampus-notifications.php:194
 msgid "Update Notification"
 msgstr ""
 
-#: wpcampus-notifications.php:181
+#: wpcampus-notifications.php:195
 msgid "View Notification"
 msgstr ""
 
-#: wpcampus-notifications.php:182
+#: wpcampus-notifications.php:196
 msgid "View Notifications"
 msgstr ""
 
-#: wpcampus-notifications.php:183
+#: wpcampus-notifications.php:197
 msgid "Search Notification"
 msgstr ""
 
-#: wpcampus-notifications.php:184
+#: wpcampus-notifications.php:198
 msgid "Insert into notification"
 msgstr ""
 
-#: wpcampus-notifications.php:185
+#: wpcampus-notifications.php:199
 msgid "Uploaded to this notification"
 msgstr ""
 
-#: wpcampus-notifications.php:186
+#: wpcampus-notifications.php:200
 msgid "Notifications list"
 msgstr ""
 
-#: wpcampus-notifications.php:187
+#: wpcampus-notifications.php:201
 msgid "Notifications list navigation"
 msgstr ""
 
-#: wpcampus-notifications.php:188
+#: wpcampus-notifications.php:202
 msgid "Filter notifications list"
+msgstr ""
+
+#: inc/admin.php:106
+msgid "Notification Details"
+msgstr ""
+
+#: inc/admin.php:288
+msgid "The following start and end settings will limit when the notification will be displayed."
+msgstr ""
+
+#: inc/admin.php:289
+msgid "The date and time will align with this site's timezone: %s."
+msgstr ""
+
+#: inc/admin.php:293
+msgid "Start Date"
+msgstr ""
+
+#: inc/admin.php:297, inc/admin.php:312
+msgid "Leave the start and end date blank to always display the notification."
+msgstr ""
+
+#: inc/admin.php:301
+msgid "Start Time"
+msgstr ""
+
+#: inc/admin.php:304
+msgid "A start date is required in order for the start time to take effect."
+msgstr ""
+
+#: inc/admin.php:304, inc/admin.php:319
+msgid "Valid format: %s"
+msgstr ""
+
+#: inc/admin.php:308
+msgid "End Date"
+msgstr ""
+
+#: inc/admin.php:316
+msgid "End Time"
+msgstr ""
+
+#: inc/admin.php:319
+msgid "An end date is required in order for the end time to take effect."
 msgstr ""
