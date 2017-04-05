@@ -1,4 +1,4 @@
-# WPCampus Notifications WordPress Plugin
+# WPCampus Notifications - WordPress Plugin
 
 WordPress plugin that manages notification functionality for WPCampus websites. Uses the WordPress REST API.
 
