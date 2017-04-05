@@ -270,11 +270,15 @@ class WPCampus_Notifications_Admin {
 			return;
 		}
 
-		// Check our nonce for updating the status.
-		if ( isset( $_POST['wpc_notifications_save_status_nonce'] ) ) {
-			if ( wp_verify_nonce( $_POST['wpc_notifications_save_status_nonce'], 'wpc_notifications_save_status' ) ) {
+		// Check our nonce for updating details.
+		if ( isset( $_POST['wpc_notifications_save_details_nonce'] ) ) {
+			if ( wp_verify_nonce( $_POST['wpc_notifications_save_details_nonce'], 'wpc_notifications_save_details' ) ) {
 
-				// The default is null or false.
+				/*
+				 * Update the deactivate field.
+				 */
+
+				// The default deactivate value is null, or false.
 				$deactivate_value = null;
 
 				// Get the deactivate form field.
@@ -292,12 +296,9 @@ class WPCampus_Notifications_Admin {
 				// Update the deactivate meta.
 				update_post_meta( $post_id, 'wpc_notif_deactivate', $deactivate_value );
 
-			}
-		}
-
-		// Check our nonce for updating details.
-		if ( isset( $_POST['wpc_notifications_save_details_nonce'] ) ) {
-			if ( wp_verify_nonce( $_POST['wpc_notifications_save_details_nonce'], 'wpc_notifications_save_details' ) ) {
+				/*
+				 * Update the date/time fields.
+				 */
 
 				// Get site timezone.
 				$site_timezone = get_option( 'timezone_string' );
@@ -373,12 +374,6 @@ class WPCampus_Notifications_Admin {
 	 */
 	public function print_notification_status_form( $post_id ) {
 
-		// Add a nonce field so we can check for it when saving the data.
-		wp_nonce_field( 'wpc_notifications_save_status', 'wpc_notifications_save_status_nonce' );
-
-		// Get saved details.
-		$notif_deactivate = get_post_meta( $post_id, 'wpc_notif_deactivate', true );
-
 		// Build wrapper classes
 		$wrapper_class = array( 'wpc-notif-status-wrapper' );
 
@@ -390,19 +385,30 @@ class WPCampus_Notifications_Admin {
 
 		?>
 		<div class="<?php echo implode( ' ', $wrapper_class ); ?>">
-			<table class="form-table wpc-notifications-post">
-				<tbody>
-					<tr>
-						<td>
-							<fieldset>
-								<legend class="screen-reader-text"><span><?php _e( 'Would you like to de-activate this notification?', 'wpc-notifications' ); ?></span></legend>
-								<label for="wpc-notif-deactivate"><input id="wpc-notif-deactivate" name="wpc_notifications[deactivate]" type="checkbox" value="1"<?php checked( $notif_deactivate ); ?>> <?php _e( 'Deactivate this notification', 'wpc-notifications' ); ?></label>
-								<p class="description"><?php _e( 'Deactivating a notification allows you to remove it from being displayed but save it for a later time.', 'wpc-notifications' ); ?></p>
-							</fieldset>
-						</td>
-					</tr>
-				</tbody>
-			</table>
+			<?php
+
+			switch ( $status ) {
+
+				case 'deactivated':
+					?><p><?php _e( 'This notification has been <strong>deactivated</strong>.', 'wpc-notifications' ); ?></p><?php
+					break;
+
+				case 'expired':
+					?><p><?php _e( 'This notification has <strong>expired</strong>.', 'wpc-notifications' ); ?></p><?php
+					break;
+
+				case 'future':
+					?><p><?php _e( 'This notification is scheduled for the <strong>future</strong>.', 'wpc-notifications' ); ?></p><?php
+					break;
+
+				case 'active':
+				default:
+					?><p><?php _e( 'This notification is <strong>active</strong>.', 'wpc-notifications' ); ?></p><?php
+					break;
+
+			}
+
+			?>
 		</div>
 		<?php
 	}
@@ -435,6 +441,7 @@ class WPCampus_Notifications_Admin {
 		$time_display_format = 'g:i A';
 
 		// Get saved details.
+		$notif_deactivate = get_post_meta( $post_id, 'wpc_notif_deactivate', true );
 		$notif_start_dt = get_post_meta( $post_id, 'wpc_notif_start_dt', true );
 		$notif_end_dt = get_post_meta( $post_id, 'wpc_notif_end_dt', true );
 
@@ -472,6 +479,16 @@ class WPCampus_Notifications_Admin {
 		<p class="description"><?php printf( __( "The date and time will align with this site's timezone: %s.", 'wpc-notifications' ), "<strong>{$site_timezone_string}</strong>" ); ?></p>
 		<table class="form-table wpc-notifications-post">
 			<tbody>
+				<tr>
+					<th scope="row"><?php _e( 'Deactivate', 'wpc-notifications' ); ?></th>
+					<td>
+						<fieldset>
+							<legend class="screen-reader-text"><span><?php _e( 'Would you like to deactivate this notification?', 'wpc-notifications' ); ?></span></legend>
+							<label for="wpc-notif-deactivate"><input id="wpc-notif-deactivate" name="wpc_notifications[deactivate]" type="checkbox" value="1"<?php checked( $notif_deactivate ); ?>> <?php _e( 'Deactivate this notification', 'wpc-notifications' ); ?></label>
+							<p class="description"><?php _e( 'Deactivating a notification allows you to remove it from being displayed but save it for a later time.', 'wpc-notifications' ); ?></p>
+						</fieldset>
+					</td>
+				</tr>
 				<tr>
 					<th scope="row"><label for="wpc-notif-start-date"><?php _e( 'Start Date', 'wpc-notifications' ); ?></label></th>
 					<td>

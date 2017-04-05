@@ -36,9 +36,21 @@ table.wp-list-table {
 
 .wpc-notif-status-wrapper {
 	background: rgba(0,255,0,0.05);
-	padding: 0 10px 10px 10px;
+	padding: 10px 20px;
+
+	p {
+		font-size: 1.4em;
+	}
 
 	&.wpc-notif-deactivated {
+		background: rgba(0,0,0,0.05);
+	}
+
+	&.wpc-notif-expired {
 		background: rgba(255,0,0,0.05);
+	}
+
+	&.wpc-notif-future {
+		background: rgba(148,0,136,0.05);
 	}
 }
