@@ -254,11 +254,18 @@ class WPCampus_Notifications {
 			return $clauses;
 		}
 
+		// Not in the admin.
+		if ( is_admin() ) {
+			return $clauses;
+		}
+
 		// LEFT JOIN to get post meta.
+		$clauses['join'] .= " LEFT JOIN {$wpdb->postmeta} wpc_nf_deact ON wpc_nf_deact.post_id = {$wpdb->posts}.ID AND wpc_nf_deact.meta_key = 'wpc_notif_deactivate'";
 		$clauses['join'] .= " LEFT JOIN {$wpdb->postmeta} wpc_nf_sdt ON wpc_nf_sdt.post_id = {$wpdb->posts}.ID AND wpc_nf_sdt.meta_key = 'wpc_notif_start_dt'";
 		$clauses['join'] .= " LEFT JOIN {$wpdb->postmeta} wpc_nf_edt ON wpc_nf_edt.post_id = {$wpdb->posts}.ID AND wpc_nf_edt.meta_key = 'wpc_notif_end_dt'";
 
 		// Check the data in WHERE.
+		$clauses['where'] .= ' AND IF ( wpc_nf_deact.meta_value IS NOT NULL AND wpc_nf_deact.meta_value != "", false, true )';
 		$clauses['where'] .= ' AND IF ( wpc_nf_sdt.meta_value IS NOT NULL, CONVERT( wpc_nf_sdt.meta_value, DATETIME ) <= NOW(), true ) AND IF ( wpc_nf_edt.meta_value IS NOT NULL, CONVERT( wpc_nf_edt.meta_value, DATETIME ) > NOW(), true )';
 
 		return $clauses;

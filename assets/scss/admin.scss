@@ -1,0 +1,44 @@
+table.wp-list-table {
+
+	tr {
+
+		&.wpc-notif-active {
+			background: rgba(0,255,0,0.04) !important;
+		}
+
+		&.wpc-notif-deactivated {
+			opacity: 0.5;
+
+			&:hover {
+				opacity: 1.0;
+			}
+		}
+
+		&.wpc-notif-expired {
+			background: rgba(255,0,0,0.04) !important;
+		}
+
+		&.wpc-notif-future {
+			background: rgba(148,0,136,0.04) !important;
+		}
+	}
+
+	td.column-wpc-notif-status {
+		font-weight: bold;
+	}
+}
+
+#wpc-notifications-status.postbox .inside {
+	clear: both;
+	margin: -7px 0 0 0 !important;
+	padding: 0 !important;
+}
+
+.wpc-notif-status-wrapper {
+	background: rgba(0,255,0,0.05);
+	padding: 0 10px 10px 10px;
+
+	&.wpc-notif-deactivated {
+		background: rgba(255,0,0,0.05);
+	}
+}

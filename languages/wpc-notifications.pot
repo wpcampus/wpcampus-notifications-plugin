@@ -85,46 +85,90 @@ msgstr ""
 msgid "Filter notifications list"
 msgstr ""
 
-#: inc/admin.php:106
+#: inc/admin.php:170
+msgid "Notification Status"
+msgstr ""
+
+#: inc/admin.php:180
 msgid "Notification Details"
 msgstr ""
 
-#: inc/admin.php:288
+#: inc/admin.php:360
+msgid "Would you like to de-activate this notification?"
+msgstr ""
+
+#: inc/admin.php:361
+msgid "Deactivate this notification"
+msgstr ""
+
+#: inc/admin.php:362
+msgid "Deactivating a notification allows you to remove it from being displayed but save it for a later time."
+msgstr ""
+
+#: inc/admin.php:433
 msgid "The following start and end settings will limit when the notification will be displayed."
 msgstr ""
 
-#: inc/admin.php:289
+#: inc/admin.php:434
 msgid "The date and time will align with this site's timezone: %s."
 msgstr ""
 
-#: inc/admin.php:293
+#: inc/admin.php:438
 msgid "Start Date"
 msgstr ""
 
-#: inc/admin.php:297, inc/admin.php:312
+#: inc/admin.php:442, inc/admin.php:457
 msgid "Leave the start and end date blank to always display the notification."
 msgstr ""
 
-#: inc/admin.php:301
+#: inc/admin.php:446
 msgid "Start Time"
 msgstr ""
 
-#: inc/admin.php:304
+#: inc/admin.php:449
 msgid "A start date is required in order for the start time to take effect."
 msgstr ""
 
-#: inc/admin.php:304, inc/admin.php:319
+#: inc/admin.php:449, inc/admin.php:464
 msgid "Valid format: %s"
 msgstr ""
 
-#: inc/admin.php:308
+#: inc/admin.php:453
 msgid "End Date"
 msgstr ""
 
-#: inc/admin.php:316
+#: inc/admin.php:461
 msgid "End Time"
 msgstr ""
 
-#: inc/admin.php:319
+#: inc/admin.php:464
 msgid "An end date is required in order for the end time to take effect."
+msgstr ""
+
+#: inc/admin.php:491
+msgid "Status"
+msgstr ""
+
+#: inc/admin.php:492
+msgid "Starts"
+msgstr ""
+
+#: inc/admin.php:493
+msgid "Ends"
+msgstr ""
+
+#: inc/admin.php:520
+msgid "Active"
+msgstr ""
+
+#: inc/admin.php:524
+msgid "Deactivated"
+msgstr ""
+
+#: inc/admin.php:528
+msgid "Expired"
+msgstr ""
+
+#: inc/admin.php:532
+msgid "Future"
 msgstr ""

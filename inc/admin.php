@@ -43,11 +43,21 @@ class WPCampus_Notifications_Admin {
 		// Add styles and scripts in the admin.
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_styles_scripts' ) );
 
+		// Filter the post class.
+		add_filter( 'post_class', array( $this, 'filter_post_class' ), 10, 3 );
+
+		// Filter the notification query.
+		add_filter( 'posts_clauses', array( $this, 'filter_posts_clauses' ), 100, 2 );
+
 		// Add meta boxes.
 		add_action( 'add_meta_boxes', array( $this, 'add_meta_boxes' ), 1, 2 );
 
 		// Save meta box data.
 		add_action( 'save_post', array( $this, 'save_meta_box_data' ), 10, 3 );
+
+		// Add/manage notification columns.
+		add_filter( 'manage_notification_posts_columns', array( $this, 'manage_notification_columns' ) );
+		add_action( 'manage_notification_posts_custom_column', array( $this, 'manage_notification_column_values' ), 10, 2 );
 
 	}
 
@@ -62,6 +72,27 @@ class WPCampus_Notifications_Admin {
 	private function __wakeup() {}
 
 	/**
+	 * Returns the current status of a notification.
+	 *
+	 * Options: active, deactivated, future, expired.
+	 *
+	 * @since   1.0.0
+	 * @access  public
+	 * @param   $post_id - int - the post ID.
+	 * @return  string - the status
+	 */
+	public function get_notification_status( $post_id ) {
+		global $wpdb;
+		return $wpdb->get_var( $wpdb->prepare( "SELECT
+			IF ( wpc_nf_deact.meta_value IS NOT NULL AND wpc_nf_deact.meta_value != '', 'deactivated', IF ( wpc_nf_edt.meta_value IS NOT NULL AND CONVERT( wpc_nf_edt.meta_value, DATETIME ) <= NOW(), 'expired', IF ( wpc_nf_sdt.meta_value IS NOT NULL AND CONVERT( wpc_nf_sdt.meta_value, DATETIME ) > NOW(), 'future', 'active' ) ) )
+ 			FROM {$wpdb->posts} posts
+ 			LEFT JOIN {$wpdb->postmeta} wpc_nf_deact ON wpc_nf_deact.post_id = posts.ID AND wpc_nf_deact.meta_key = 'wpc_notif_deactivate'
+ 			LEFT JOIN {$wpdb->postmeta} wpc_nf_sdt ON wpc_nf_sdt.post_id = posts.ID AND wpc_nf_sdt.meta_key = 'wpc_notif_start_dt'
+ 			LEFT JOIN {$wpdb->postmeta} wpc_nf_edt ON wpc_nf_edt.post_id = posts.ID AND wpc_nf_edt.meta_key = 'wpc_notif_end_dt'
+ 			WHERE %d = posts.ID AND 'notification' = posts.post_type AND 'publish' = posts.post_status", $post_id ) );
+	}
+
+	/**
 	 * Add styles and scripts in the admin.
 	 *
 	 * @since   1.0.0
@@ -71,21 +102,92 @@ class WPCampus_Notifications_Admin {
 	public function enqueue_styles_scripts( $hook_suffix ) {
 		global $post_type;
 
-		// Only for the edit notification admin screens.
-		if ( ! ( 'notification' == $post_type && in_array( $hook_suffix, array( 'post.php', 'post-new.php' ) ) ) ) {
+		// Only for notification screens.
+		if ( 'notification' != $post_type ) {
 			return;
 		}
 
-		// Register the timepicker script.
-		wp_register_script( 'timepicker', '//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js', array( 'jquery' ), null, true );
+		// Only for the edit notification edit screens.
+		if ( in_array( $hook_suffix, array( 'post.php', 'post-new.php' ) ) ) {
 
-		// Enqueue the notification script.
-		wp_enqueue_script( 'wpc-notifications-admin', trailingslashit( wpcampus_notifications()->plugin_url ) . 'assets/js/admin-post.min.js', array( 'jquery', 'jquery-ui-datepicker', 'timepicker' ), null, true );
+			// Register the timepicker script.
+			wp_register_script( 'timepicker', '//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js', array( 'jquery' ), null, true );
 
-		// Enqueue the various style dependencies.
-		wp_enqueue_style( 'jquery-ui', '//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css', array(), null );
-		wp_enqueue_style( 'timepicker', '//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.css', array(), null );
+			// Enqueue the notification script.
+			wp_enqueue_script( 'wpc-notifications-admin', trailingslashit( wpcampus_notifications()->plugin_url ) . 'assets/js/admin-post.min.js', array( 'jquery', 'jquery-ui-datepicker', 'timepicker' ), null, true );
 
+			// Enqueue the various style dependencies.
+			wp_enqueue_style( 'jquery-ui', '//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css', array(), null );
+			wp_enqueue_style( 'timepicker', '//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.css', array(), null );
+
+		}
+
+		// Only need our styles on these pages.
+		if ( in_array( $hook_suffix, array( 'edit.php', 'post.php', 'post-new.php' ) ) ) {
+			wp_enqueue_style( 'wpc-notifications-admin', trailingslashit( wpcampus_notifications()->plugin_url ) . 'assets/css/admin.min.css', array(), null );
+		}
+
+	}
+
+	/**
+	 * Filters the list of CSS classes for the current post.
+	 *
+	 * @since   1.0.0
+	 * @access  public
+	 * @param   $classes - array - An array of post classes.
+	 * @param   $class - array - An array of additional classes added to the post.
+	 * @param   $post_id - int - The post ID.
+	 * @return  array - the filtered post classes
+	 */
+	public function filter_post_class( $classes, $class, $post_id ) {
+
+		// Only for notification post type.
+		if ( 'notification' != get_post_type( $post_id ) ) {
+			return $classes;
+		}
+
+		// Get/add the status.
+		$status = $this->get_notification_status( $post_id );
+		if ( $status ) {
+			$classes[] = "wpc-notif-{$status}";
+		}
+
+		return $classes;
+	}
+
+	/**
+	 * Filters all query clauses at once, for convenience.
+	 *
+	 * In the admin, we want to order the notifications by status.
+	 *
+	 * @since   1.0.0
+	 * @access  public
+	 * @param   $clauses - array - The list of clauses for the query.
+	 * @param   $query - WP_Query - The WP_Query instance (passed by reference).
+	 * @return  array - the filtered clauses.
+	 */
+	public function filter_posts_clauses( $clauses, $query ) {
+		global $wpdb;
+
+		// Only for notification post type.
+		if ( 'notification' != $query->get( 'post_type' ) ) {
+			return $clauses;
+		}
+
+		// Only for the main query.
+		if ( ! $query->is_main_query() ) {
+			return $clauses;
+		}
+
+		// LEFT JOIN to get post meta.
+		$clauses['join'] .= " LEFT JOIN {$wpdb->postmeta} wpc_nf_deact ON wpc_nf_deact.post_id = {$wpdb->posts}.ID AND wpc_nf_deact.meta_key = 'wpc_notif_deactivate'";
+		$clauses['join'] .= " LEFT JOIN {$wpdb->postmeta} wpc_nf_sdt ON wpc_nf_sdt.post_id = {$wpdb->posts}.ID AND wpc_nf_sdt.meta_key = 'wpc_notif_start_dt'";
+		$clauses['join'] .= " LEFT JOIN {$wpdb->postmeta} wpc_nf_edt ON wpc_nf_edt.post_id = {$wpdb->posts}.ID AND wpc_nf_edt.meta_key = 'wpc_notif_end_dt'";
+
+		// ORDERBY status: active, future, expired, deactivated
+		$clauses['orderby'] = "IF ( wpc_nf_deact.meta_value IS NOT NULL AND wpc_nf_deact.meta_value != '', 4, IF ( wpc_nf_edt.meta_value IS NOT NULL AND CONVERT( wpc_nf_edt.meta_value, DATETIME ) <= NOW(), 3, IF ( wpc_nf_sdt.meta_value IS NOT NULL AND CONVERT( wpc_nf_sdt.meta_value, DATETIME ) > NOW(), 2, 1 ) ) ) ASC";
+
+		return $clauses;
 	}
 
 	/**
@@ -99,6 +201,16 @@ class WPCampus_Notifications_Admin {
 
 		// Add meta boxes for our notifications.
 		if ( 'notification' == $post_type ) {
+
+			// Notification Status.
+			add_meta_box(
+				'wpc-notifications-status',
+				__( 'Notification Status', 'wpc-notifications' ),
+				array( $this, 'print_meta_boxes' ),
+				$post_type,
+				'normal',
+				'high'
+			);
 
 			// Notification Details.
 			add_meta_box(
@@ -120,12 +232,16 @@ class WPCampus_Notifications_Admin {
 	 * @return  void
 	 */
 	public function print_meta_boxes( $post, $metabox ) {
+		switch ( $metabox['id'] ) {
 
-		// Print notification details form inside its meta box.
-		if ( 'wpc-notifications-details' == $metabox['id'] ) {
-			$this->print_notification_details_form( $post->ID );
+			case 'wpc-notifications-status':
+				$this->print_notification_status_form( $post->ID );
+				break;
+
+			case 'wpc-notifications-details':
+				$this->print_notification_details_form( $post->ID );
+				break;
 		}
-
 	}
 
 	/**
@@ -154,10 +270,33 @@ class WPCampus_Notifications_Admin {
 			return;
 		}
 
-		// Check if our nonce is set because the 'save_post' action can be triggered at other times.
-		if ( isset( $_POST['wpc_notifications_save_details_nonce'] ) ) {
+		// Check our nonce for updating the status.
+		if ( isset( $_POST['wpc_notifications_save_status_nonce'] ) ) {
+			if ( wp_verify_nonce( $_POST['wpc_notifications_save_status_nonce'], 'wpc_notifications_save_status' ) ) {
 
-			// Verify the nonce.
+				// The default is null or false.
+				$deactivate_value = null;
+
+				// Get the deactivate form field.
+				if ( isset( $_POST['wpc_notifications']['deactivate'] ) ) {
+
+					// Sanitize the value.
+					$field_value = sanitize_text_field( $_POST['wpc_notifications']['deactivate'] );
+
+					// If "truthy", set to deactivate.
+					if ( $field_value ) {
+						$deactivate_value = 1;
+					}
+				}
+
+				// Update the deactivate meta.
+				update_post_meta( $post_id, 'wpc_notif_deactivate', $deactivate_value );
+
+			}
+		}
+
+		// Check our nonce for updating details.
+		if ( isset( $_POST['wpc_notifications_save_details_nonce'] ) ) {
 			if ( wp_verify_nonce( $_POST['wpc_notifications_save_details_nonce'], 'wpc_notifications_save_details' ) ) {
 
 				// Get site timezone.
@@ -222,6 +361,50 @@ class WPCampus_Notifications_Admin {
 				}
 			}
 		}
+	}
+
+	/**
+	 * Print the notification status form.
+	 *
+	 * @since   1.0.0
+	 * @access  public
+	 * @param   $post_id - int - the post ID.
+	 * @return  void
+	 */
+	public function print_notification_status_form( $post_id ) {
+
+		// Add a nonce field so we can check for it when saving the data.
+		wp_nonce_field( 'wpc_notifications_save_status', 'wpc_notifications_save_status_nonce' );
+
+		// Get saved details.
+		$notif_deactivate = get_post_meta( $post_id, 'wpc_notif_deactivate', true );
+
+		// Build wrapper classes
+		$wrapper_class = array( 'wpc-notif-status-wrapper' );
+
+		// Get/add the status.
+		$status = $this->get_notification_status( $post_id );
+		if ( $status ) {
+			$wrapper_class[] = "wpc-notif-{$status}";
+		}
+
+		?>
+		<div class="<?php echo implode( ' ', $wrapper_class ); ?>">
+			<table class="form-table wpc-notifications-post">
+				<tbody>
+					<tr>
+						<td>
+							<fieldset>
+								<legend class="screen-reader-text"><span><?php _e( 'Would you like to de-activate this notification?', 'wpc-notifications' ); ?></span></legend>
+								<label for="wpc-notif-deactivate"><input id="wpc-notif-deactivate" name="wpc_notifications[deactivate]" type="checkbox" value="1"<?php checked( $notif_deactivate ); ?>> <?php _e( 'Deactivate this notification', 'wpc-notifications' ); ?></label>
+								<p class="description"><?php _e( 'Deactivating a notification allows you to remove it from being displayed but save it for a later time.', 'wpc-notifications' ); ?></p>
+							</fieldset>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<?php
 	}
 
 	/**
@@ -323,6 +506,101 @@ class WPCampus_Notifications_Admin {
 		</table>
 		<?php
 	}
+
+	/**
+	 * Filters the columns displayed in the notifications list table.
+	 *
+	 * @since   1.0.0
+	 * @access  public
+	 * @param   $columns - array - An array of column names.
+	 * @return  array - filtered list of columns.
+	 */
+	public function manage_notification_columns( $columns ) {
+
+		// Loop through each column and create new columns.
+		$new_columns = array();
+		foreach ( $columns as $key => $value ) {
+
+			// Add each column to new columns.
+			$new_columns[ $key ] = $value;
+
+			// Add our columns after title.
+			if ( 'title' == $key ) {
+				$new_columns['wpc-notif-status'] = __( 'Status', 'wpc-notifications' );
+				$new_columns['wpc-notif-starts'] = __( 'Starts', 'wpc-notifications' );
+				$new_columns['wpc-notif-ends'] = __( 'Ends', 'wpc-notifications' );
+			}
+		}
+
+		return $new_columns;
+	}
+
+	/**
+	 * Fires for each custom column of a specific post type in the Posts list table.
+	 *
+	 * The dynamic portion of the hook name, `$post->post_type`, refers to the post type.
+	 *
+	 * @since   1.0.0
+	 * @access  public
+	 * @param   $column_name - string - The name of the column to display.
+	 * @param   $post_id - int - The current post ID.
+	 * @return  void
+	 */
+	public function manage_notification_column_values( $column_name, $post_id ) {
+
+		switch ( $column_name ) {
+
+			case 'wpc-notif-status':
+
+				switch ( $this->get_notification_status( $post_id ) ) {
+
+					case 'active':
+						_e( 'Active', 'wpc-notifications' );
+						break;
+
+					case 'deactivated':
+						_e( 'Deactivated', 'wpc-notifications' );
+						break;
+
+					case 'expired':
+						_e( 'Expired', 'wpc-notifications' );
+						break;
+
+					case 'future':
+						_e( 'Future', 'wpc-notifications' );
+						break;
+
+				}
+				break;
+
+			case 'wpc-notif-starts':
+			case 'wpc-notif-ends':
+
+				// Get/process the date/time.
+				$date_time_key = 'wpc-notif-starts' == $column_name ? 'wpc_notif_start_dt' : 'wpc_notif_end_dt';
+				$date_time = get_post_meta( $post_id, $date_time_key, true );
+				if ( $date_time && false !== strtotime( $date_time ) ) {
+
+					// Convert to Date/Time.
+					$date_time = new DateTime( $date_time );
+
+					// Get site timezone.
+					$site_timezone = get_option( 'timezone_string' );
+					if ( ! $site_timezone ) {
+						$site_timezone = 'UTC';
+					}
+
+					// Convert the timezone.
+					$date_time->setTimezone( new DateTimeZone( $site_timezone ) );
+
+					// Print the date/time.
+					echo $date_time->format( 'F j, Y g:i A' );
+
+				}
+				break;
+		}
+	}
+
 }
 
 /**
