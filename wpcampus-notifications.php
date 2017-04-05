@@ -308,6 +308,13 @@ class WPCampus_Notifications {
 			}
 		}
 
+		// Adding a "basic" field to content stripped of specific HTML tags.
+		if ( ! empty( $response->data['content']['rendered'] ) ) {
+			$response->data['content']['basic'] = strip_tags( $response->data['content']['rendered'], '<a>' );
+		} else {
+			$response->data['content']['basic'] = '';
+		}
+
 		return $response;
 	}
 }
