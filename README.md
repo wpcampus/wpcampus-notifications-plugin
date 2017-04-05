@@ -17,3 +17,9 @@ The majority of the code that adds the notifications to the WPCampus websites ex
 * Be sure to add the mustache template. The mustache template for each of our websites exists in its own theme:
   * [WPCampus 2017 theme](https://github.com/wpcampus/wpcampus-2017-theme/blob/master/partials/notifications.html)
   * [WPCampus Online theme](https://github.com/wpcampus/wpcampus-online-theme/blob/master/partials/notifications.html)
+  
+## Disclaimer
+
+This repo is shared for educational purposes. Feel free to explore, copy, submit fixes, and share the code.
+
+**However, please respect that the WPCampus branding and design are intended solely for the WPCampus organization.**
