@@ -94,101 +94,109 @@ msgid "Notification Details"
 msgstr ""
 
 #: inc/admin.php:393
-msgid "This notification has been <strong>deactivated</strong>."
-msgstr ""
-
-#: inc/admin.php:397
-msgid "This notification has <strong>expired</strong>."
-msgstr ""
-
-#: inc/admin.php:401
-msgid "This notification is scheduled for the <strong>future</strong>."
-msgstr ""
-
-#: inc/admin.php:406
 msgid "This notification is <strong>active</strong>."
 msgstr ""
 
-#: inc/admin.php:478
+#: inc/admin.php:397
+msgid "This notification has been <strong>deactivated</strong>."
+msgstr ""
+
+#: inc/admin.php:401
+msgid "This notification has <strong>expired</strong>."
+msgstr ""
+
+#: inc/admin.php:405
+msgid "This notification is scheduled for the <strong>future</strong>."
+msgstr ""
+
+#: inc/admin.php:410
+msgid "This notification is <strong>pending</strong>."
+msgstr ""
+
+#: inc/admin.php:482
 msgid "The following start and end settings will limit when the notification will be displayed."
 msgstr ""
 
-#: inc/admin.php:479
+#: inc/admin.php:483
 msgid "The date and time will align with this site's timezone: %s."
 msgstr ""
 
-#: inc/admin.php:483
+#: inc/admin.php:487
 msgid "Deactivate"
 msgstr ""
 
-#: inc/admin.php:486
+#: inc/admin.php:490
 msgid "Would you like to deactivate this notification?"
 msgstr ""
 
-#: inc/admin.php:487
+#: inc/admin.php:491
 msgid "Deactivate this notification"
 msgstr ""
 
-#: inc/admin.php:488
+#: inc/admin.php:492
 msgid "Deactivating a notification allows you to remove it from being displayed but save it for a later time."
 msgstr ""
 
-#: inc/admin.php:493
+#: inc/admin.php:497
 msgid "Start Date"
 msgstr ""
 
-#: inc/admin.php:497, inc/admin.php:512
+#: inc/admin.php:501, inc/admin.php:516
 msgid "Leave the start and end date blank to always display the notification."
 msgstr ""
 
-#: inc/admin.php:501
+#: inc/admin.php:505
 msgid "Start Time"
 msgstr ""
 
-#: inc/admin.php:504
+#: inc/admin.php:508
 msgid "A start date is required in order for the start time to take effect."
 msgstr ""
 
-#: inc/admin.php:504, inc/admin.php:519
+#: inc/admin.php:508, inc/admin.php:523
 msgid "Valid format: %s"
 msgstr ""
 
-#: inc/admin.php:508
+#: inc/admin.php:512
 msgid "End Date"
 msgstr ""
 
-#: inc/admin.php:516
+#: inc/admin.php:520
 msgid "End Time"
 msgstr ""
 
-#: inc/admin.php:519
+#: inc/admin.php:523
 msgid "An end date is required in order for the end time to take effect."
 msgstr ""
 
-#: inc/admin.php:546
+#: inc/admin.php:550
 msgid "Status"
 msgstr ""
 
-#: inc/admin.php:547
+#: inc/admin.php:551
 msgid "Starts"
 msgstr ""
 
-#: inc/admin.php:548
+#: inc/admin.php:552
 msgid "Ends"
 msgstr ""
 
-#: inc/admin.php:575
+#: inc/admin.php:579
 msgid "Active"
 msgstr ""
 
-#: inc/admin.php:579
+#: inc/admin.php:583
 msgid "Deactivated"
 msgstr ""
 
-#: inc/admin.php:583
+#: inc/admin.php:587
 msgid "Expired"
 msgstr ""
 
-#: inc/admin.php:587
+#: inc/admin.php:591
 msgid "Future"
+msgstr ""
+
+#: inc/admin.php:595
+msgid "Pending"
 msgstr ""

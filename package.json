@@ -7,7 +7,7 @@
     "type": "git",
     "url": "https://github.com/wpcampus/wpcampus-notifications-plugin.git"
   },
-  "author": "Rachel Carden",
+  "author": "WPCampus",
   "devDependencies": {
     "gulp": "^3.9.0",
     "gulp-autoprefixer": "^3.1.1",

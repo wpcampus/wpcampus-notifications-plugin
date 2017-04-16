@@ -21,6 +21,10 @@ table.wp-list-table {
 		&.wpc-notif-future {
 			background: rgba(148,0,136,0.04) !important;
 		}
+
+		&.wpc-notif-pending {
+			background: rgba(255,255,0,0.03) !important;
+		}
 	}
 
 	td.column-wpc-notif-status {
@@ -52,5 +56,9 @@ table.wp-list-table {
 
 	&.wpc-notif-future {
 		background: rgba(148,0,136,0.05);
+	}
+
+	&.wpc-notif-pending {
+		background: rgba(255,255,0,0.08);
 	}
 }

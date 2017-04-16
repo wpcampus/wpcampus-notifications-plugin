@@ -84,12 +84,12 @@ class WPCampus_Notifications_Admin {
 	public function get_notification_status( $post_id ) {
 		global $wpdb;
 		return $wpdb->get_var( $wpdb->prepare( "SELECT
-			IF ( wpc_nf_deact.meta_value IS NOT NULL AND wpc_nf_deact.meta_value != '', 'deactivated', IF ( wpc_nf_edt.meta_value IS NOT NULL AND CONVERT( wpc_nf_edt.meta_value, DATETIME ) <= NOW(), 'expired', IF ( wpc_nf_sdt.meta_value IS NOT NULL AND CONVERT( wpc_nf_sdt.meta_value, DATETIME ) > NOW(), 'future', 'active' ) ) )
- 			FROM {$wpdb->posts} posts
- 			LEFT JOIN {$wpdb->postmeta} wpc_nf_deact ON wpc_nf_deact.post_id = posts.ID AND wpc_nf_deact.meta_key = 'wpc_notif_deactivate'
- 			LEFT JOIN {$wpdb->postmeta} wpc_nf_sdt ON wpc_nf_sdt.post_id = posts.ID AND wpc_nf_sdt.meta_key = 'wpc_notif_start_dt'
- 			LEFT JOIN {$wpdb->postmeta} wpc_nf_edt ON wpc_nf_edt.post_id = posts.ID AND wpc_nf_edt.meta_key = 'wpc_notif_end_dt'
- 			WHERE %d = posts.ID AND 'notification' = posts.post_type AND 'publish' = posts.post_status", $post_id ) );
+			IF ( 'publish' != posts.post_status, 'pending', IF ( wpc_nf_deact.meta_value IS NOT NULL AND wpc_nf_deact.meta_value != '', 'deactivated', IF ( wpc_nf_edt.meta_value IS NOT NULL AND CONVERT( wpc_nf_edt.meta_value, DATETIME ) <= NOW(), 'expired', IF ( wpc_nf_sdt.meta_value IS NOT NULL AND CONVERT( wpc_nf_sdt.meta_value, DATETIME ) > NOW(), 'future', 'active' ) ) ) )
+			FROM {$wpdb->posts} posts
+			LEFT JOIN {$wpdb->postmeta} wpc_nf_deact ON wpc_nf_deact.post_id = posts.ID AND wpc_nf_deact.meta_key = 'wpc_notif_deactivate'
+			LEFT JOIN {$wpdb->postmeta} wpc_nf_sdt ON wpc_nf_sdt.post_id = posts.ID AND wpc_nf_sdt.meta_key = 'wpc_notif_start_dt'
+			LEFT JOIN {$wpdb->postmeta} wpc_nf_edt ON wpc_nf_edt.post_id = posts.ID AND wpc_nf_edt.meta_key = 'wpc_notif_end_dt'
+			WHERE %d = posts.ID AND 'notification' = posts.post_type", $post_id ) );
 	}
 
 	/**
@@ -389,6 +389,10 @@ class WPCampus_Notifications_Admin {
 
 			switch ( $status ) {
 
+				case 'active':
+					?><p><?php _e( 'This notification is <strong>active</strong>.', 'wpc-notifications' ); ?></p><?php
+					break;
+
 				case 'deactivated':
 					?><p><?php _e( 'This notification has been <strong>deactivated</strong>.', 'wpc-notifications' ); ?></p><?php
 					break;
@@ -401,9 +405,9 @@ class WPCampus_Notifications_Admin {
 					?><p><?php _e( 'This notification is scheduled for the <strong>future</strong>.', 'wpc-notifications' ); ?></p><?php
 					break;
 
-				case 'active':
+				case 'pending':
 				default:
-					?><p><?php _e( 'This notification is <strong>active</strong>.', 'wpc-notifications' ); ?></p><?php
+					?><p><?php _e( 'This notification is <strong>pending</strong>.', 'wpc-notifications' ); ?></p><?php
 					break;
 
 			}
@@ -585,6 +589,10 @@ class WPCampus_Notifications_Admin {
 
 					case 'future':
 						_e( 'Future', 'wpc-notifications' );
+						break;
+
+					case 'pending':
+						_e( 'Pending', 'wpc-notifications' );
 						break;
 
 				}
