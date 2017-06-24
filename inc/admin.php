@@ -52,8 +52,8 @@ class WPCampus_Notifications_Admin {
 		// Add meta boxes.
 		add_action( 'add_meta_boxes', array( $this, 'add_meta_boxes' ), 1, 2 );
 
-		// Save meta box data.
-		add_action( 'save_post', array( $this, 'save_meta_box_data' ), 10, 3 );
+		// Save meta box data for notifications.
+		add_action( 'save_post_notification', array( $this, 'save_meta_box_data' ), 10, 3 );
 
 		// Add/manage notification columns.
 		add_filter( 'manage_notification_posts_columns', array( $this, 'manage_notification_columns' ) );
