@@ -4,7 +4,7 @@
  * functionality for the plugin.
  *
  * @category    Class
- * @package     WPCampus Notifications
+ * @package     WPCampus: Notifications
  */
 class WPCampus_Notifications_Admin {
 

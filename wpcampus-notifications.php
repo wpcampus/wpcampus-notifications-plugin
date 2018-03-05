@@ -1,15 +1,15 @@
 <?php
 /**
- * Plugin Name:     WPCampus Notifications
+ * Plugin Name:     WPCampus: Notifications
  * Plugin URI:      https://github.com/wpcampus/wpcampus-notifications-plugin
- * Description:     Handles notification functionality for WPCampus websites.
+ * Description:     Manages notifications on main WPCampus website to share with network.
  * Version:         1.0.0
  * Author:          WPCampus
  * Author URI:      https://wpcampus.org
  * Text Domain:     wpc-notifications
  * Domain Path:     /languages
  *
- * @package         WPCampus Notifications
+ * @package         WPCampus: Notifications
  */
 
 // If this file is called directly, abort.
@@ -28,7 +28,7 @@ if ( is_admin() ) {
  *
  * @since       1.0.0
  * @category    Class
- * @package     WPCampus Notifications
+ * @package     WPCampus: Notifications
  */
 class WPCampus_Notifications {
 
@@ -95,7 +95,7 @@ class WPCampus_Notifications {
 		register_activation_hook( __FILE__, array( $this, 'activate' ) );
 		register_deactivation_hook( __FILE__, array( $this, 'deactivate' ) );
 
-		// Load our textdomain.
+		// Load our text domain.
 		add_action( 'plugins_loaded', array( $this, 'textdomain' ) );
 
 		// Register our post types.

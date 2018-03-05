@@ -1,7 +1,7 @@
 {
   "name": "wpcampus-notifications-plugin",
   "version": "1.0.0",
-  "description": "Handles notification functionality for WPCampus websites.",
+  "description": "Manages notifications on main WPCampus website to share with network.",
   "license": "GPL-2.0+",
   "repository": {
     "type": "git",
