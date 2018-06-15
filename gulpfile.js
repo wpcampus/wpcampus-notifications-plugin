@@ -1,41 +1,50 @@
-var autoprefixer = require('gulp-autoprefixer');
-var gulp = require('gulp');
-var minify = require('gulp-minify');
-var phpcs = require('gulp-phpcs');
-var rename = require('gulp-rename');
-var sass = require('gulp-sass');
-var sort = require('gulp-sort');
-var watch = require('gulp-watch');
-var wp_pot = require('gulp-wp-pot');
+const autoprefixer = require('gulp-autoprefixer');
+const cleanCSS = require('gulp-clean-css');
+const gulp = require('gulp');
+const mergeMediaQueries = require('gulp-merge-media-queries');
+const minify = require('gulp-minify');
+const notify = require('gulp-notify');
+const rename = require('gulp-rename');
+const sass = require('gulp-sass');
+const shell = require('gulp-shell');
+const sort = require('gulp-sort');
+const wp_pot = require('gulp-wp-pot');
 
 // Set the source for specific files.
-var src = {
-	scss: ['assets/scss/**/*'],
-	js: ['assets/js/**/*','!assets/js/*.min.js'],
+const src = {
+	sass: ['assets/src/scss/**/*'],
+	js: ['assets/src/js/**/*'],
 	php: ['**/*.php','!vendor/**','!node_modules/**']
 };
 
 // Define the destination paths for each file type.
-var dest = {
-	scss: 'assets/css',
-	js: 'assets/js'
+const dest = {
+	sass: 'assets/build/css',
+	js: 'assets/build/js'
 };
 
 // Sass is pretty awesome, right?
 gulp.task('sass',function() {
-	return gulp.src(src.scss)
+	return gulp.src(src.sass)
 		.pipe(sass({
-			outputStyle: 'compressed'
-		})
-			.on('error',sass.logError))
+			outputStyle: 'expanded'
+		}).on('error', sass.logError))
+		.pipe(mergeMediaQueries())
 		.pipe(autoprefixer({
 			browsers: ['last 2 versions'],
 			cascade: false
 		}))
+		.pipe(cleanCSS({
+			compatibility: 'ie8'
+		}))
 		.pipe(rename({
 			suffix: '.min'
 		}))
-		.pipe(gulp.dest(dest.scss));
+		.pipe(gulp.dest(dest.sass))
+		.pipe(notify('WPC Notifications SASS compiled'), {
+			onLast: true,
+			emitError: true
+		});
 });
 
 // Minify our JS
@@ -43,21 +52,30 @@ gulp.task('js',function() {
 	gulp.src(src.js)
 		.pipe(minify({
 			mangle: false,
+			noSource: true,
 			ext:{
 				min:'.min.js'
 			}
 		}))
 		.pipe(gulp.dest(dest.js))
+		.pipe(notify('WPC Notifications JS compiled'), {
+			onLast: true,
+			emitError: true
+		});
 });
 
-// Check our PHP.
-gulp.task('php',function() {
-	gulp.src(src.php)
-		.pipe(phpcs({
-			bin: 'vendor/bin/phpcs',
-			standard: 'WordPress-Core'
+// "Sniff" our PHP.
+gulp.task('php', function() {
+	// TODO: Clean up. Want to run command and show notify for sniff errors.
+	return gulp.src('wpcampus-notifications.php', {read: false})
+		.pipe(shell(['composer sniff'], {
+			ignoreErrors: true,
+			verbose: false
 		}))
-		.pipe(phpcs.reporter('log'));
+		.pipe(notify('WPC Notifications PHP sniffed'), {
+			onLast: true,
+			emitError: true
+		});
 });
 
 // Create the translation file.
@@ -73,7 +91,11 @@ gulp.task('translate', function() {
 			team: 'WPCampus <code@wpcampus.org>',
 			headers: false
 		}))
-		.pipe(gulp.dest('languages/wpc-notifications.pot'));
+		.pipe(gulp.dest('languages/wpc-notifications.pot'))
+		.pipe(notify('WPC Notifications translated'), {
+			onLast: true,
+			emitError: true
+		});
 });
 
 // Compile all the things
@@ -83,8 +105,8 @@ gulp.task('compile',['sass','js']);
 gulp.task('test',['php']);
 
 // Watch the files.
-gulp.task('watch',function() {
-	gulp.watch(src.scss,['sass']);
+gulp.task('watch',['compile','php'],function() {
+	gulp.watch(src.sass,['sass']);
 	gulp.watch(src.js,['js']);
 	gulp.watch(src.php,['php']);
 });

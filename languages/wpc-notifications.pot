@@ -1,4 +1,4 @@
-# Copyright (C) 2017 WPCampus_Notifications
+# Copyright (C) 2018 WPCampus_Notifications
 # This file is distributed under the same license as the WPCampus_Notifications package.
 msgid ""
 msgstr ""
@@ -11,192 +11,196 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://github.com/wpcampus/wpcampus-notifications-plugin/issues\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: wpcampus-notifications.php:184
+#: inc/class-wpcampus-notifications-admin.php:182
+msgid "Notification Status"
+msgstr ""
+
+#: inc/class-wpcampus-notifications-admin.php:192
+msgid "Notification Details"
+msgstr ""
+
+#: inc/class-wpcampus-notifications-admin.php:364
+msgid "This notification is <strong>active</strong>."
+msgstr ""
+
+#: inc/class-wpcampus-notifications-admin.php:368
+msgid "This notification has been <strong>deactivated</strong>."
+msgstr ""
+
+#: inc/class-wpcampus-notifications-admin.php:372
+msgid "This notification has <strong>expired</strong>."
+msgstr ""
+
+#: inc/class-wpcampus-notifications-admin.php:376
+msgid "This notification is scheduled for the <strong>future</strong>."
+msgstr ""
+
+#: inc/class-wpcampus-notifications-admin.php:381
+msgid "This notification is <strong>pending</strong>."
+msgstr ""
+
+#: inc/class-wpcampus-notifications-admin.php:452
+msgid "The following start and end settings will limit when the notification will be displayed."
+msgstr ""
+
+#: inc/class-wpcampus-notifications-admin.php:453
+msgid "The date and time will align with this site's timezone: %s."
+msgstr ""
+
+#: inc/class-wpcampus-notifications-admin.php:457
+msgid "Deactivate"
+msgstr ""
+
+#: inc/class-wpcampus-notifications-admin.php:460
+msgid "Would you like to deactivate this notification?"
+msgstr ""
+
+#: inc/class-wpcampus-notifications-admin.php:461
+msgid "Deactivate this notification"
+msgstr ""
+
+#: inc/class-wpcampus-notifications-admin.php:462
+msgid "Deactivating a notification allows you to remove it from being displayed but save it for a later time."
+msgstr ""
+
+#: inc/class-wpcampus-notifications-admin.php:467
+msgid "Start Date"
+msgstr ""
+
+#: inc/class-wpcampus-notifications-admin.php:471, inc/class-wpcampus-notifications-admin.php:486
+msgid "Leave the start and end date blank to always display the notification."
+msgstr ""
+
+#: inc/class-wpcampus-notifications-admin.php:475
+msgid "Start Time"
+msgstr ""
+
+#: inc/class-wpcampus-notifications-admin.php:478
+msgid "A start date is required in order for the start time to take effect."
+msgstr ""
+
+#: inc/class-wpcampus-notifications-admin.php:478, inc/class-wpcampus-notifications-admin.php:493
+msgid "Valid format: %s"
+msgstr ""
+
+#: inc/class-wpcampus-notifications-admin.php:482
+msgid "End Date"
+msgstr ""
+
+#: inc/class-wpcampus-notifications-admin.php:490
+msgid "End Time"
+msgstr ""
+
+#: inc/class-wpcampus-notifications-admin.php:493
+msgid "An end date is required in order for the end time to take effect."
+msgstr ""
+
+#: inc/class-wpcampus-notifications-admin.php:519
+msgid "Status"
+msgstr ""
+
+#: inc/class-wpcampus-notifications-admin.php:520
+msgid "Starts"
+msgstr ""
+
+#: inc/class-wpcampus-notifications-admin.php:521
+msgid "Ends"
+msgstr ""
+
+#: inc/class-wpcampus-notifications-admin.php:547
+msgid "Active"
+msgstr ""
+
+#: inc/class-wpcampus-notifications-admin.php:551
+msgid "Deactivated"
+msgstr ""
+
+#: inc/class-wpcampus-notifications-admin.php:555
+msgid "Expired"
+msgstr ""
+
+#: inc/class-wpcampus-notifications-admin.php:559
+msgid "Future"
+msgstr ""
+
+#: inc/class-wpcampus-notifications-admin.php:563
+msgid "Pending"
+msgstr ""
+
+#: inc/class-wpcampus-notifications-global.php:101
 msgctxt "Post Type General Name"
 msgid "Notifications"
 msgstr ""
 
-#: wpcampus-notifications.php:185
+#: inc/class-wpcampus-notifications-global.php:102
 msgctxt "Post Type Singular Name"
 msgid "Notification"
 msgstr ""
 
-#: wpcampus-notifications.php:186, wpcampus-notifications.php:187, wpcampus-notifications.php:207
+#: inc/class-wpcampus-notifications-global.php:103, inc/class-wpcampus-notifications-global.php:104, inc/class-wpcampus-notifications-global.php:124
 msgid "Notifications"
 msgstr ""
 
-#: wpcampus-notifications.php:188
+#: inc/class-wpcampus-notifications-global.php:105
 msgid "Notification Archives"
 msgstr ""
 
-#: wpcampus-notifications.php:189
+#: inc/class-wpcampus-notifications-global.php:106
 msgid "Notification Attributes"
 msgstr ""
 
-#: wpcampus-notifications.php:190
+#: inc/class-wpcampus-notifications-global.php:107
 msgid "All Notifications"
 msgstr ""
 
-#: wpcampus-notifications.php:191
+#: inc/class-wpcampus-notifications-global.php:108
 msgid "Add New Notification"
 msgstr ""
 
-#: wpcampus-notifications.php:192
+#: inc/class-wpcampus-notifications-global.php:109
 msgid "New Notification"
 msgstr ""
 
-#: wpcampus-notifications.php:193
+#: inc/class-wpcampus-notifications-global.php:110
 msgid "Edit Notification"
 msgstr ""
 
-#: wpcampus-notifications.php:194
+#: inc/class-wpcampus-notifications-global.php:111
 msgid "Update Notification"
 msgstr ""
 
-#: wpcampus-notifications.php:195
+#: inc/class-wpcampus-notifications-global.php:112
 msgid "View Notification"
 msgstr ""
 
-#: wpcampus-notifications.php:196
+#: inc/class-wpcampus-notifications-global.php:113
 msgid "View Notifications"
 msgstr ""
 
-#: wpcampus-notifications.php:197
+#: inc/class-wpcampus-notifications-global.php:114
 msgid "Search Notification"
 msgstr ""
 
-#: wpcampus-notifications.php:198
+#: inc/class-wpcampus-notifications-global.php:115
 msgid "Insert into notification"
 msgstr ""
 
-#: wpcampus-notifications.php:199
+#: inc/class-wpcampus-notifications-global.php:116
 msgid "Uploaded to this notification"
 msgstr ""
 
-#: wpcampus-notifications.php:200
+#: inc/class-wpcampus-notifications-global.php:117
 msgid "Notifications list"
 msgstr ""
 
-#: wpcampus-notifications.php:201
+#: inc/class-wpcampus-notifications-global.php:118
 msgid "Notifications list navigation"
 msgstr ""
 
-#: wpcampus-notifications.php:202
+#: inc/class-wpcampus-notifications-global.php:119
 msgid "Filter notifications list"
 msgstr ""
 
-#: inc/admin.php:208
-msgid "Notification Status"
-msgstr ""
-
-#: inc/admin.php:218
-msgid "Notification Details"
-msgstr ""
-
-#: inc/admin.php:393
-msgid "This notification is <strong>active</strong>."
-msgstr ""
-
-#: inc/admin.php:397
-msgid "This notification has been <strong>deactivated</strong>."
-msgstr ""
-
-#: inc/admin.php:401
-msgid "This notification has <strong>expired</strong>."
-msgstr ""
-
-#: inc/admin.php:405
-msgid "This notification is scheduled for the <strong>future</strong>."
-msgstr ""
-
-#: inc/admin.php:410
-msgid "This notification is <strong>pending</strong>."
-msgstr ""
-
-#: inc/admin.php:482
-msgid "The following start and end settings will limit when the notification will be displayed."
-msgstr ""
-
-#: inc/admin.php:483
-msgid "The date and time will align with this site's timezone: %s."
-msgstr ""
-
-#: inc/admin.php:487
-msgid "Deactivate"
-msgstr ""
-
-#: inc/admin.php:490
-msgid "Would you like to deactivate this notification?"
-msgstr ""
-
-#: inc/admin.php:491
-msgid "Deactivate this notification"
-msgstr ""
-
-#: inc/admin.php:492
-msgid "Deactivating a notification allows you to remove it from being displayed but save it for a later time."
-msgstr ""
-
-#: inc/admin.php:497
-msgid "Start Date"
-msgstr ""
-
-#: inc/admin.php:501, inc/admin.php:516
-msgid "Leave the start and end date blank to always display the notification."
-msgstr ""
-
-#: inc/admin.php:505
-msgid "Start Time"
-msgstr ""
-
-#: inc/admin.php:508
-msgid "A start date is required in order for the start time to take effect."
-msgstr ""
-
-#: inc/admin.php:508, inc/admin.php:523
-msgid "Valid format: %s"
-msgstr ""
-
-#: inc/admin.php:512
-msgid "End Date"
-msgstr ""
-
-#: inc/admin.php:520
-msgid "End Time"
-msgstr ""
-
-#: inc/admin.php:523
-msgid "An end date is required in order for the end time to take effect."
-msgstr ""
-
-#: inc/admin.php:550
-msgid "Status"
-msgstr ""
-
-#: inc/admin.php:551
-msgid "Starts"
-msgstr ""
-
-#: inc/admin.php:552
-msgid "Ends"
-msgstr ""
-
-#: inc/admin.php:579
-msgid "Active"
-msgstr ""
-
-#: inc/admin.php:583
-msgid "Deactivated"
-msgstr ""
-
-#: inc/admin.php:587
-msgid "Expired"
-msgstr ""
-
-#: inc/admin.php:591
-msgid "Future"
-msgstr ""
-
-#: inc/admin.php:595
-msgid "Pending"
+#: inc/class-wpcampus-notifications.php:65
+msgid "WPCampus Notifications"
 msgstr ""

@@ -6,7 +6,7 @@
  * @category    Class
  * @package     WPCampus: Notifications
  */
-class WPCampus_Notifications_Admin {
+final class WPCampus_Notifications_Admin {
 
 	/**
 	 * Holds the class instance.
@@ -72,30 +72,8 @@ class WPCampus_Notifications_Admin {
 	private function __wakeup() {}
 
 	/**
-	 * Returns the current status of a notification.
-	 *
-	 * Options: active, deactivated, future, expired.
-	 *
-	 * @since   1.0.0
-	 * @access  public
-	 * @param   $post_id - int - the post ID.
-	 * @return  string - the status
-	 */
-	public function get_notification_status( $post_id ) {
-		global $wpdb;
-		return $wpdb->get_var( $wpdb->prepare( "SELECT
-			IF ( 'publish' != posts.post_status, 'pending', IF ( wpc_nf_deact.meta_value IS NOT NULL AND wpc_nf_deact.meta_value != '', 'deactivated', IF ( wpc_nf_edt.meta_value IS NOT NULL AND CONVERT( wpc_nf_edt.meta_value, DATETIME ) <= NOW(), 'expired', IF ( wpc_nf_sdt.meta_value IS NOT NULL AND CONVERT( wpc_nf_sdt.meta_value, DATETIME ) > NOW(), 'future', 'active' ) ) ) )
-			FROM {$wpdb->posts} posts
-			LEFT JOIN {$wpdb->postmeta} wpc_nf_deact ON wpc_nf_deact.post_id = posts.ID AND wpc_nf_deact.meta_key = 'wpc_notif_deactivate'
-			LEFT JOIN {$wpdb->postmeta} wpc_nf_sdt ON wpc_nf_sdt.post_id = posts.ID AND wpc_nf_sdt.meta_key = 'wpc_notif_start_dt'
-			LEFT JOIN {$wpdb->postmeta} wpc_nf_edt ON wpc_nf_edt.post_id = posts.ID AND wpc_nf_edt.meta_key = 'wpc_notif_end_dt'
-			WHERE %d = posts.ID AND 'notification' = posts.post_type", $post_id ) );
-	}
-
-	/**
 	 * Add styles and scripts in the admin.
 	 *
-	 * @since   1.0.0
 	 * @access  public
 	 * @param	string - $hook_suffix - the ID of the current page
 	 */
@@ -114,7 +92,7 @@ class WPCampus_Notifications_Admin {
 			wp_register_script( 'timepicker', '//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js', array( 'jquery' ), null, true );
 
 			// Enqueue the notification script.
-			wp_enqueue_script( 'wpc-notifications-admin', trailingslashit( wpcampus_notifications()->plugin_url ) . 'assets/js/admin-post.min.js', array( 'jquery', 'jquery-ui-datepicker', 'timepicker' ), null, true );
+			wp_enqueue_script( 'wpc-notifications-admin', trailingslashit( wpcampus_notifications()->get_plugin_url() ) . 'assets/build/js/admin-post.min.js', array( 'jquery', 'jquery-ui-datepicker', 'timepicker' ), null, true );
 
 			// Enqueue the various style dependencies.
 			wp_enqueue_style( 'jquery-ui', '//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css', array(), null );
@@ -124,15 +102,13 @@ class WPCampus_Notifications_Admin {
 
 		// Only need our styles on these pages.
 		if ( in_array( $hook_suffix, array( 'edit.php', 'post.php', 'post-new.php' ) ) ) {
-			wp_enqueue_style( 'wpc-notifications-admin', trailingslashit( wpcampus_notifications()->plugin_url ) . 'assets/css/admin.min.css', array(), null );
+			wp_enqueue_style( 'wpc-notifications-admin', trailingslashit( wpcampus_notifications()->get_plugin_url() ) . 'assets/build/css/admin.min.css', array(), null );
 		}
-
 	}
 
 	/**
 	 * Filters the list of CSS classes for the current post.
 	 *
-	 * @since   1.0.0
 	 * @access  public
 	 * @param   $classes - array - An array of post classes.
 	 * @param   $class - array - An array of additional classes added to the post.
@@ -147,7 +123,7 @@ class WPCampus_Notifications_Admin {
 		}
 
 		// Get/add the status.
-		$status = $this->get_notification_status( $post_id );
+		$status = wpcampus_notifications()->get_notification_status( $post_id );
 		if ( $status ) {
 			$classes[] = "wpc-notif-{$status}";
 		}
@@ -160,7 +136,6 @@ class WPCampus_Notifications_Admin {
 	 *
 	 * In the admin, we want to order the notifications by status.
 	 *
-	 * @since   1.0.0
 	 * @access  public
 	 * @param   $clauses - array - The list of clauses for the query.
 	 * @param   $query - WP_Query - The WP_Query instance (passed by reference).
@@ -193,7 +168,6 @@ class WPCampus_Notifications_Admin {
 	/**
 	 * Adds our admin meta boxes.
 	 *
-	 * @since   1.0.0
 	 * @access  public
 	 * @return  void
 	 */
@@ -227,7 +201,6 @@ class WPCampus_Notifications_Admin {
 	/**
 	 * Prints the content in our admin meta boxes.
 	 *
-	 * @since   1.0.0
 	 * @access  public
 	 * @return  void
 	 */
@@ -248,7 +221,6 @@ class WPCampus_Notifications_Admin {
 	 * When the post is saved, saves our custom meta box data.
 	 *
 	 * @access  public
-	 * @since   1.0.0
 	 * @param	int - $post_id - the ID of the post being saved
 	 * @param	WP_Post - $post - the post object
 	 * @param	bool - $update - whether this is an existing post being updated or not
@@ -367,7 +339,6 @@ class WPCampus_Notifications_Admin {
 	/**
 	 * Print the notification status form.
 	 *
-	 * @since   1.0.0
 	 * @access  public
 	 * @param   $post_id - int - the post ID.
 	 * @return  void
@@ -378,7 +349,7 @@ class WPCampus_Notifications_Admin {
 		$wrapper_class = array( 'wpc-notif-status-wrapper' );
 
 		// Get/add the status.
-		$status = $this->get_notification_status( $post_id );
+		$status = wpcampus_notifications()->get_notification_status( $post_id );
 		if ( $status ) {
 			$wrapper_class[] = "wpc-notif-{$status}";
 		}
@@ -420,7 +391,6 @@ class WPCampus_Notifications_Admin {
 	/**
 	 * Print the notification details form.
 	 *
-	 * @since   1.0.0
 	 * @access  public
 	 * @param   $post_id - int - the post ID.
 	 * @return  void
@@ -531,7 +501,6 @@ class WPCampus_Notifications_Admin {
 	/**
 	 * Filters the columns displayed in the notifications list table.
 	 *
-	 * @since   1.0.0
 	 * @access  public
 	 * @param   $columns - array - An array of column names.
 	 * @return  array - filtered list of columns.
@@ -561,7 +530,6 @@ class WPCampus_Notifications_Admin {
 	 *
 	 * The dynamic portion of the hook name, `$post->post_type`, refers to the post type.
 	 *
-	 * @since   1.0.0
 	 * @access  public
 	 * @param   $column_name - string - The name of the column to display.
 	 * @param   $post_id - int - The current post ID.
@@ -573,7 +541,7 @@ class WPCampus_Notifications_Admin {
 
 			case 'wpc-notif-status':
 
-				switch ( $this->get_notification_status( $post_id ) ) {
+				switch ( wpcampus_notifications()->get_notification_status( $post_id ) ) {
 
 					case 'active':
 						_e( 'Active', 'wpc-notifications' );
