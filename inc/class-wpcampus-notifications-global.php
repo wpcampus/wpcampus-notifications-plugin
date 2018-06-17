@@ -340,30 +340,30 @@ final class WPCampus_Notifications_Global {
 
 		// Define the notification post type labels.
 		$notification_labels = array(
-			'name'                  => _x( 'Notifications', 'Post Type General Name', 'wpc-notifications' ),
-			'singular_name'         => _x( 'Notification', 'Post Type Singular Name', 'wpc-notifications' ),
-			'menu_name'             => __( 'Notifications', 'wpc-notifications' ),
-			'name_admin_bar'        => __( 'Notifications', 'wpc-notifications' ),
-			'archives'              => __( 'Notification Archives', 'wpc-notifications' ),
-			'attributes'            => __( 'Notification Attributes', 'wpc-notifications' ),
-			'all_items'             => __( 'All Notifications', 'wpc-notifications' ),
-			'add_new_item'          => __( 'Add New Notification', 'wpc-notifications' ),
-			'new_item'              => __( 'New Notification', 'wpc-notifications' ),
-			'edit_item'             => __( 'Edit Notification', 'wpc-notifications' ),
-			'update_item'           => __( 'Update Notification', 'wpc-notifications' ),
-			'view_item'             => __( 'View Notification', 'wpc-notifications' ),
-			'view_items'            => __( 'View Notifications', 'wpc-notifications' ),
-			'search_items'          => __( 'Search Notification', 'wpc-notifications' ),
-			'insert_into_item'      => __( 'Insert into notification', 'wpc-notifications' ),
-			'uploaded_to_this_item' => __( 'Uploaded to this notification', 'wpc-notifications' ),
-			'items_list'            => __( 'Notifications list', 'wpc-notifications' ),
-			'items_list_navigation' => __( 'Notifications list navigation', 'wpc-notifications' ),
-			'filter_items_list'     => __( 'Filter notifications list', 'wpc-notifications' ),
+			'name'                  => _x( 'Announcements', 'Post Type General Name', 'wpc-notifications' ),
+			'singular_name'         => _x( 'Announcement', 'Post Type Singular Name', 'wpc-notifications' ),
+			'menu_name'             => __( 'Announcements', 'wpc-notifications' ),
+			'name_admin_bar'        => __( 'Announcements', 'wpc-notifications' ),
+			'archives'              => __( 'Announcement Archives', 'wpc-notifications' ),
+			'attributes'            => __( 'Announcement Attributes', 'wpc-notifications' ),
+			'all_items'             => __( 'All Announcements', 'wpc-notifications' ),
+			'add_new_item'          => __( 'Add New Announcement', 'wpc-notifications' ),
+			'new_item'              => __( 'New Announcement', 'wpc-notifications' ),
+			'edit_item'             => __( 'Edit Announcement', 'wpc-notifications' ),
+			'update_item'           => __( 'Update Announcement', 'wpc-notifications' ),
+			'view_item'             => __( 'View Announcement', 'wpc-notifications' ),
+			'view_items'            => __( 'View Announcements', 'wpc-notifications' ),
+			'search_items'          => __( 'Search Announcement', 'wpc-notifications' ),
+			'insert_into_item'      => __( 'Insert into announcement', 'wpc-notifications' ),
+			'uploaded_to_this_item' => __( 'Uploaded to this announcement', 'wpc-notifications' ),
+			'items_list'            => __( 'Announcements list', 'wpc-notifications' ),
+			'items_list_navigation' => __( 'Announcements list navigation', 'wpc-notifications' ),
+			'filter_items_list'     => __( 'Filter announcements list', 'wpc-notifications' ),
 		);
 
 		// Define the notification post type arguments.
 		$notification_args = array(
-			'label'                 => __( 'Notifications', 'wpc-notifications' ),
+			'label'                 => __( 'Announcements', 'wpc-notifications' ),
 			'labels'                => $notification_labels,
 			'supports'              => array( 'title', 'thumbnail', 'revisions' ),
 			'hierarchical'          => false,
@@ -382,7 +382,7 @@ final class WPCampus_Notifications_Global {
 			'show_in_rest'          => true,
 			'rest_base'             => 'notifications',
 			'rewrite'               => array(
-				'slug'              => 'notifications',
+				'slug'              => 'announcements',
 			),
 		);
 
