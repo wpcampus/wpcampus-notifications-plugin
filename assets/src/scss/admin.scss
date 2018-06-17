@@ -1,9 +1,17 @@
 table.wp-list-table {
 
+	.wpc-notif-status-label {
+		font-weight: bold;
+	}
+
 	tr {
 
 		&.wpc-notif-active {
 			background: rgba(0,255,0,0.04) !important;
+
+			&.wpc-notif-sticky {
+				background: rgba(254,255,162,0.5) !important;
+			}
 		}
 
 		&.wpc-notif-deactivated {
@@ -25,10 +33,6 @@ table.wp-list-table {
 		&.wpc-notif-pending {
 			background: rgba(255,255,0,0.03) !important;
 		}
-	}
-
-	td.column-wpc-notif-status {
-		font-weight: bold;
 	}
 }
 

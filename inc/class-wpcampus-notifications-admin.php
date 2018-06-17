@@ -40,6 +40,9 @@ final class WPCampus_Notifications_Admin {
 	 */
 	protected function __construct() {
 
+		// Remove meta boxes.
+		add_action( 'admin_menu', array( $this, 'remove_meta_boxes' ), 100 );
+
 		// Add styles and scripts in the admin.
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_styles_scripts' ) );
 
@@ -70,6 +73,19 @@ final class WPCampus_Notifications_Admin {
 	 */
 	private function __clone() {}
 	private function __wakeup() {}
+
+	/**
+	 * Removes meta boxes we don't need.
+	 *
+	 * @access  public
+	 * @return  void
+	 */
+	public function remove_meta_boxes() {
+
+		// Remove the notification formats taxonomy meta box.
+		remove_meta_box( 'tagsdiv-notification_format', 'notification', 'side' );
+
+	}
 
 	/**
 	 * Add styles and scripts in the admin.
@@ -128,6 +144,11 @@ final class WPCampus_Notifications_Admin {
 			$classes[] = "wpc-notif-{$status}";
 		}
 
+		// Is it sticky?
+		if ( wpcampus_notifications()->is_sticky( $post_id ) ) {
+			$classes[] = 'wpc-notif-sticky';
+		}
+
 		return $classes;
 	}
 
@@ -156,11 +177,12 @@ final class WPCampus_Notifications_Admin {
 
 		// LEFT JOIN to get post meta.
 		$clauses['join'] .= " LEFT JOIN {$wpdb->postmeta} wpc_nf_deact ON wpc_nf_deact.post_id = {$wpdb->posts}.ID AND wpc_nf_deact.meta_key = 'wpc_notif_deactivate'";
+		$clauses['join'] .= " LEFT JOIN {$wpdb->postmeta} wpc_sticky ON wpc_sticky.post_id = {$wpdb->posts}.ID AND wpc_sticky.meta_key = 'sticky'";
 		$clauses['join'] .= " LEFT JOIN {$wpdb->postmeta} wpc_nf_sdt ON wpc_nf_sdt.post_id = {$wpdb->posts}.ID AND wpc_nf_sdt.meta_key = 'wpc_notif_start_dt'";
 		$clauses['join'] .= " LEFT JOIN {$wpdb->postmeta} wpc_nf_edt ON wpc_nf_edt.post_id = {$wpdb->posts}.ID AND wpc_nf_edt.meta_key = 'wpc_notif_end_dt'";
 
-		// ORDERBY status: active, future, expired, deactivated
-		$clauses['orderby'] = "IF ( wpc_nf_deact.meta_value IS NOT NULL AND wpc_nf_deact.meta_value != '', 4, IF ( wpc_nf_edt.meta_value IS NOT NULL AND CONVERT( wpc_nf_edt.meta_value, DATETIME ) <= NOW(), 3, IF ( wpc_nf_sdt.meta_value IS NOT NULL AND CONVERT( wpc_nf_sdt.meta_value, DATETIME ) > NOW(), 2, 1 ) ) ) ASC";
+		// ORDERBY status: active, future, expired, deactivated.
+		$clauses['orderby'] = "IF ( wpc_nf_deact.meta_value IS NOT NULL AND wpc_nf_deact.meta_value != '', 1, 0 ) ASC, IF ( wpc_sticky.meta_value IS NOT NULL, wpc_sticky.meta_value, 0 ) DESC, IF ( wpc_nf_edt.meta_value IS NULL OR wpc_nf_edt.meta_value = '', 1, 0 ) DESC, IF ( wpc_nf_edt.meta_value IS NOT NULL AND wpc_nf_edt.meta_value != '', CONVERT( wpc_nf_edt.meta_value, DATETIME ), 0 ) DESC, IF ( wpc_nf_sdt.meta_value IS NOT NULL AND wpc_nf_sdt.meta_value != '', CONVERT( wpc_nf_sdt.meta_value, DATETIME ), 0 ) DESC, {$wpdb->posts}.post_date DESC";
 
 		return $clauses;
 	}
@@ -544,23 +566,37 @@ final class WPCampus_Notifications_Admin {
 				switch ( wpcampus_notifications()->get_notification_status( $post_id ) ) {
 
 					case 'active':
-						_e( 'Active', 'wpc-notifications' );
+						?>
+						<span class="wpc-notif-status-label"><?php _e( 'Active', 'wpc-notifications' ); ?></span>
+						<?php
+
+						if ( wpcampus_notifications()->is_sticky( $post_id ) ) {
+							echo ' (' . __( 'Sticky', 'wpc-notifications' ) . ')';
+						}
 						break;
 
 					case 'deactivated':
-						_e( 'Deactivated', 'wpc-notifications' );
+						?>
+						<span class="wpc-notif-status-label"><?php _e( 'Deactivated', 'wpc-notifications' ); ?></span>
+						<?php
 						break;
 
 					case 'expired':
-						_e( 'Expired', 'wpc-notifications' );
+						?>
+						<span class="wpc-notif-status-label"><?php _e( 'Expired', 'wpc-notifications' ); ?></span>
+						<?php
 						break;
 
 					case 'future':
-						_e( 'Future', 'wpc-notifications' );
+						?>
+						<span class="wpc-notif-status-label"><?php _e( 'Future', 'wpc-notifications' ); ?></span>
+						<?php
 						break;
 
 					case 'pending':
-						_e( 'Pending', 'wpc-notifications' );
+						?>
+						<span class="wpc-notif-status-label"><?php _e( 'Pending', 'wpc-notifications' ); ?></span>
+						<?php
 						break;
 
 				}

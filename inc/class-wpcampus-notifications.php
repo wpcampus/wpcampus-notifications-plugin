@@ -10,6 +10,29 @@
 final class WPCampus_Notifications {
 
 	/**
+	 * The names of our notification formats.
+	 *
+	 * @var array
+	 */
+	private $notification_formats = array(
+		'website',
+		'twitter',
+		'facebook',
+	);
+
+	/**
+	 * The names of our notification feeds.
+	 *
+	 * @var array
+	 */
+	private $notification_feeds = array(
+		'feed/notifications',
+		'feed/notifications/website',
+		'feed/notifications/twitter',
+		'feed/notifications/facebook',
+	);
+
+	/**
 	 * Holds the absolute URL to
 	 * the main plugin directory.
 	 * Used for assets.
@@ -127,6 +150,62 @@ final class WPCampus_Notifications {
 	}
 
 	/**
+	 * Return an array of notification formats.
+	 *
+	 * @return array of formats
+	 */
+	public function get_notification_formats() {
+		return $this->notification_formats;
+	}
+
+	/**
+	 * Return an array of notification feeds.
+	 *
+	 * @return array of feeds
+	 */
+	public function get_notification_feeds() {
+		return $this->notification_feeds;
+	}
+
+	/**
+	 * Return the format for a specific feed.
+	 *
+	 * @param $query - WP_Query object
+	 * @return string - the format.
+	 */
+	public function get_query_feed_format( $query ) {
+		switch ( $query->get( 'feed' ) ) {
+
+			case 'feed/notifications/facebook':
+				return 'facebook';
+				break;
+
+			case 'feed/notifications/twitter':
+				return 'twitter';
+				break;
+
+			case 'feed/notifications':
+			case 'feed/notifications/website':
+				return 'website';
+				break;
+
+		}
+
+		return '';
+	}
+
+	/**
+	 * Returns true if the
+	 * notification is sticky.
+	 *
+	 * @param  $post_id - int - the post ID.
+	 * @return bool - true if a sticky notification, false otherwise.
+	 */
+	public function is_sticky( $post_id ) {
+		return (bool) get_post_meta( $post_id, 'sticky', true );
+	}
+
+	/**
 	 * Returns the current status of a notification.
 	 *
 	 * Options: active, deactivated, future, expired.
@@ -144,5 +223,35 @@ final class WPCampus_Notifications {
 			LEFT JOIN {$wpdb->postmeta} wpc_nf_sdt ON wpc_nf_sdt.post_id = posts.ID AND wpc_nf_sdt.meta_key = 'wpc_notif_start_dt'
 			LEFT JOIN {$wpdb->postmeta} wpc_nf_edt ON wpc_nf_edt.post_id = posts.ID AND wpc_nf_edt.meta_key = 'wpc_notif_end_dt'
 			WHERE %d = posts.ID AND 'notification' = posts.post_type", $post_id ) );
+	}
+
+	/**
+	 * Get a notification's permalink.
+	 *
+	 * @param   $post_id - int - the post ID.
+	 * @return  string - the permalink.
+	 */
+	public function get_notification_permalink( $post_id ) {
+		$permalink = get_post_meta( $post_id, 'permalink', true );
+		return ! empty( $permalink ) ? $permalink : get_post_type_archive_link( 'notification' );
+	}
+
+	/**
+	 * Get a notification's message
+	 * depending on format.
+	 *
+	 * @param $post_id - int - the post ID.
+	 * @param $format - string - the format name.
+	 * @return string - the message.
+	 */
+	public function get_notification_message( $post_id, $format ) {
+
+		if ( ! in_array( $format, $this->get_notification_formats() ) ) {
+			return '';
+		}
+
+		$message = get_post_meta( $post_id, "{$format}_message", true );
+
+		return trim( apply_filters( 'wpcampus_notification_message', $message, $post_id, $format ) );
 	}
 }

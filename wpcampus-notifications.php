@@ -20,6 +20,7 @@ defined( 'ABSPATH' ) or die();
 $plugin_dir = plugin_dir_path( __FILE__ );
 
 // Load the main Event_Schedule class and global functionality.
+require_once $plugin_dir . 'inc/wpcampus-notifications-fields.php';
 require_once $plugin_dir . 'inc/class-wpcampus-notifications.php';
 require_once $plugin_dir . 'inc/class-wpcampus-notifications-global.php';
 
