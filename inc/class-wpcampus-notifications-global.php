@@ -41,6 +41,7 @@ final class WPCampus_Notifications_Global {
 		add_action( 'pre_get_posts', array( $plugin, 'modify_notifications_query' ), 100 );
 
 		// Filter the notification query.
+		//add_filter( 'posts_orderby', array( $plugin, 'filter_posts_orderby' ), 100, 2 );
 		add_filter( 'post_limits', array( $plugin, 'filter_post_limits' ), 100, 2 );
 		add_filter( 'posts_clauses', array( $plugin, 'filter_posts_clauses' ), 100, 2 );
 
@@ -229,6 +230,23 @@ final class WPCampus_Notifications_Global {
 
 		return $response;
 	}
+
+	/**
+	 * Set orderby at random for notification feeds.
+	 *
+	 * @param  string   $orderby The ORDER BY clause of the query.
+	 * @param  WP_Query $query The WP_Query instance (passed by reference).
+	 * @return string - filtered limits.
+
+	public function filter_posts_orderby( $orderby, $query ) {
+
+		// Remove limits for notification feeds.
+		if ( $query->is_feed( wpcampus_notifications()->get_notification_feeds() ) ) {
+			return 'RAND()';
+		}
+
+		return $orderby;
+	}*/
 
 	/**
 	 * Remove the limits for notification feeds.
