@@ -110,7 +110,6 @@ function wpcampus_notifications_add_fields() {
 					'conditional_logic' => 0,
 					'default_value' => '',
 					'placeholder' => '',
-					'maxlength' => 10,
 					'rows' => 4,
 					'new_lines' => '',
 				),
