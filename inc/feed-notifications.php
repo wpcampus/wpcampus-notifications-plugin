@@ -8,9 +8,9 @@ $more = 1;
 
 echo '<?xml version="1.0" encoding="' . get_option( 'blog_charset' ) . '"?>';
 
-// Get the feed format.
+// Get the feed platform.
 global $wp_query;
-$feed_format = wpcampus_notifications()->get_query_feed_format( $wp_query );
+$feed_platform = wpcampus_notifications()->get_query_feed_platform( $wp_query );
 
 ?>
 <rss version="2.0"
@@ -35,19 +35,11 @@ $feed_format = wpcampus_notifications()->get_query_feed_format( $wp_query );
 
 		while ( have_posts() ) : the_post();
 
-			$content = wpcampus_notifications()->get_notification_message( get_the_ID(), $feed_format );
+			$content = wpcampus_notifications()->get_notification_message( get_the_ID(), $feed_platform );
 
 			?>
 			<item>
-				<title><?php
-
-				if ( in_array( $feed_format, array( 'facebook', 'twitter' ) ) ) {
-					echo $content;
-				} else {
-					the_title_rss();
-				}
-
-				?></title>
+				<title><?php the_title_rss(); ?></title>
 				<link><?php the_permalink_rss() ?></link>
 				<pubDate><?php echo mysql2date( 'D, d M Y H:i:s +0000', get_post_time( 'Y-m-d H:i:s', true ), false ); ?></pubDate>
 				<dc:creator><![CDATA[<?php the_author() ?>]]></dc:creator>

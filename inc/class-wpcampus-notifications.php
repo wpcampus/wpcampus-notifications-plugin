@@ -10,14 +10,12 @@
 final class WPCampus_Notifications {
 
 	/**
-	 * The names of our notification formats.
+	 * The names of our notification platforms.
 	 *
 	 * @var array
 	 */
-	private $notification_formats = array(
+	private $platforms = array(
 		'website',
-		'twitter',
-		'facebook',
 	);
 
 	/**
@@ -28,8 +26,6 @@ final class WPCampus_Notifications {
 	private $notification_feeds = array(
 		'feed/notifications',
 		'feed/notifications/website',
-		'feed/notifications/twitter',
-		'feed/notifications/facebook',
 	);
 
 	/**
@@ -150,12 +146,12 @@ final class WPCampus_Notifications {
 	}
 
 	/**
-	 * Return an array of notification formats.
+	 * Return an array of notification platforms.
 	 *
-	 * @return array of formats
+	 * @return array of platforms
 	 */
-	public function get_notification_formats() {
-		return $this->notification_formats;
+	public function get_platforms() {
+		return $this->platforms;
 	}
 
 	/**
@@ -168,21 +164,13 @@ final class WPCampus_Notifications {
 	}
 
 	/**
-	 * Return the format for a specific feed.
+	 * Return the platform for a specific feed.
 	 *
 	 * @param $query - WP_Query object
-	 * @return string - the format.
+	 * @return string - the platform.
 	 */
-	public function get_query_feed_format( $query ) {
+	public function get_query_feed_platform( $query ) {
 		switch ( $query->get( 'feed' ) ) {
-
-			case 'feed/notifications/facebook':
-				return 'facebook';
-				break;
-
-			case 'feed/notifications/twitter':
-				return 'twitter';
-				break;
 
 			case 'feed/notifications':
 			case 'feed/notifications/website':
@@ -237,21 +225,20 @@ final class WPCampus_Notifications {
 	}
 
 	/**
-	 * Get a notification's message
-	 * depending on format.
+	 * Get a notification's message depending on platform.
 	 *
 	 * @param $post_id - int - the post ID.
-	 * @param $format - string - the format name.
+	 * @param $platform - string - the platform name.
 	 * @return string - the message.
 	 */
-	public function get_notification_message( $post_id, $format ) {
+	public function get_notification_message( $post_id, $platform ) {
 
-		if ( ! in_array( $format, $this->get_notification_formats() ) ) {
+		if ( ! in_array( $platform, $this->get_platforms() ) ) {
 			return '';
 		}
 
-		$message = get_post_meta( $post_id, "{$format}_message", true );
+		$message = get_post_meta( $post_id, "{$platform}_message", true );
 
-		return trim( apply_filters( 'wpcampus_notification_message', $message, $post_id, $format ) );
+		return trim( apply_filters( 'wpcampus_notification_message', $message, $post_id, $platform ) );
 	}
 }

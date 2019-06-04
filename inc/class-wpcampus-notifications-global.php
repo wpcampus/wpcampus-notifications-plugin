@@ -33,7 +33,7 @@ final class WPCampus_Notifications_Global {
 		// Register our post types.
 		add_action( 'init', array( $plugin, 'register_cpts_taxonomies' ) );
 
-		// Register our social media feeds.
+		// Register our notification feeds.
 		add_action( 'init', array( $plugin, 'add_feeds' ) );
 
 		// Modify the query for our tweets feed.
@@ -181,7 +181,7 @@ final class WPCampus_Notifications_Global {
 			$query->set( 'posts_per_page', -1 );
 			$query->set( 'nopaging', true );
 
-			$notification_format = wpcampus_notifications()->get_query_feed_format( $query );
+			$notification_format = wpcampus_notifications()->get_query_feed_platform( $query );
 
 		}
 
@@ -288,7 +288,7 @@ final class WPCampus_Notifications_Global {
 
 		// Only get notifications that have a message.
 		$notification_format = $query->get( 'notification_format' );
-		if ( empty( $notification_format ) || ! in_array( $notification_format, wpcampus_notifications()->get_notification_formats() ) ) {
+		if ( empty( $notification_format ) || ! in_array( $notification_format, wpcampus_notifications()->get_platforms() ) ) {
 			$notification_format = 'website';
 		}
 
@@ -325,7 +325,7 @@ final class WPCampus_Notifications_Global {
 
 		// Do we have a format?
 		$format = get_query_var( 'notification_format' );
-		if ( empty( $format ) || ! in_array( $format, wpcampus_notifications()->get_notification_formats() ) ) {
+		if ( empty( $format ) || ! in_array( $format, wpcampus_notifications()->get_platforms() ) ) {
 			$format = 'website';
 		}
 
