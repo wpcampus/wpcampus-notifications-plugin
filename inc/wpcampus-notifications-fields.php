@@ -54,7 +54,14 @@ function wpcampus_notifications_add_fields() {
 					'type' => 'url',
 					'instructions' => __( 'Where do you want users to go for more information?', 'wpc-notifications' ),
 					'required' => 1,
-					'conditional_logic' => 0,
+					'conditional_logic' => array(
+						array(
+							array(
+								'field' => 'field_5b243c03874da',
+								'operator' => '!=empty',
+							),
+						),
+					),
 					'default_value' => '',
 					'placeholder' => '',
 				),
