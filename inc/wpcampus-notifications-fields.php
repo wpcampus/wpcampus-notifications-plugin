@@ -36,7 +36,7 @@ function wpcampus_notifications_add_fields() {
 					'name' => 'formats',
 					'type' => 'taxonomy',
 					'instructions' => __( 'Where do you want to display the message? The selected formats must have a defined message.', 'wpc-notifications' ),
-					'required' => 1,
+					'required' => 0,
 					'conditional_logic' => 0,
 					'taxonomy' => 'notification_format',
 					'field_type' => 'checkbox',
