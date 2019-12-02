@@ -8,6 +8,8 @@
  */
 final class WPCampus_Notifications_Admin {
 
+    private $assets_ver = '1.1';
+
 	/**
 	 * Holds the class instance.
 	 *
@@ -108,7 +110,7 @@ final class WPCampus_Notifications_Admin {
 			wp_register_script( 'timepicker', '//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js', array( 'jquery' ), null, true );
 
 			// Enqueue the notification script.
-			wp_enqueue_script( 'wpc-notifications-admin', trailingslashit( wpcampus_notifications()->get_plugin_url() ) . 'assets/build/js/admin-post.min.js', array( 'jquery', 'jquery-ui-datepicker', 'timepicker' ), null, true );
+			wp_enqueue_script( 'wpc-notifications-admin', trailingslashit( wpcampus_notifications()->get_plugin_url() ) . 'assets/js/admin-post.min.js', array( 'jquery', 'jquery-ui-datepicker', 'timepicker' ), $this->assets_ver, true );
 
 			// Enqueue the various style dependencies.
 			wp_enqueue_style( 'jquery-ui', '//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css', array(), null );
@@ -118,7 +120,7 @@ final class WPCampus_Notifications_Admin {
 
 		// Only need our styles on these pages.
 		if ( in_array( $hook_suffix, array( 'edit.php', 'post.php', 'post-new.php' ) ) ) {
-			wp_enqueue_style( 'wpc-notifications-admin', trailingslashit( wpcampus_notifications()->get_plugin_url() ) . 'assets/build/css/admin.min.css', array(), null );
+			wp_enqueue_style( 'wpc-notifications-admin', trailingslashit( wpcampus_notifications()->get_plugin_url() ) . 'assets/css/admin.min.css', [], $this->assets_ver );
 		}
 	}
 

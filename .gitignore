@@ -1,3 +1,4 @@
 node_modules
 vendor
-assets/build
+assets/css/*.min.css
+assets/js/*.min.js
