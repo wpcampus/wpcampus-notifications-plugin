@@ -7,8 +7,6 @@ const notify = require('gulp-notify');
 const rename = require('gulp-rename');
 const sass = require('gulp-sass');
 const shell = require('gulp-shell');
-const sort = require('gulp-sort');
-const wp_pot = require('gulp-wp-pot');
 
 // Set the source for specific files.
 const src = {
@@ -78,26 +76,6 @@ gulp.task('php', function() {
 		});
 });
 
-// Create the translation file.
-gulp.task('translate', function() {
-	gulp.src(src.php)
-		.pipe(sort())
-		.pipe(wp_pot({
-			domain: 'wpc-notifications',
-			destFile:'wpc-notifications.pot',
-			package: 'WPCampus_Notifications',
-			bugReport: 'https://github.com/wpcampus/wpcampus-notifications-plugin/issues',
-			lastTranslator: 'WPCampus <code@wpcampus.org>',
-			team: 'WPCampus <code@wpcampus.org>',
-			headers: false
-		}))
-		.pipe(gulp.dest('languages/wpc-notifications.pot'))
-		.pipe(notify('WPC Notifications translated'), {
-			onLast: true,
-			emitError: true
-		});
-});
-
 // Compile all the things
 gulp.task('compile',['sass','js']);
 
@@ -112,4 +90,4 @@ gulp.task('watch',['compile','php'],function() {
 });
 
 // Our default tasks.
-gulp.task('default',['compile','test','translate']);
+gulp.task('default',['compile','test']);
